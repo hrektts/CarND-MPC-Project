@@ -3,6 +3,45 @@ Self-Driving Car Engineer Nanodegree Program
 
 ---
 
+## Model
+
+I implemented a kinematic model of the vehicle to drive the car in the simulation
+environment as follows:
+
+![Vehicle model][model]
+
+Here, *x*, *y*, *ψ*, *v*, *δ*, *a*, *Lf*, and *dt* are x-position, y-position, orientation of
+the vehicle, steering angle, acceleration, the distance between the front of
+the vehicle and its center of gravity, and time difference between t+1 and t,
+respectively.
+I selected *δ* and *a* as the imput of the model for controlling the state, which is
+descrived by *x*, *y*, *ψ*, and *v*.
+
+[model]: https://latex.codecogs.com/gif.latex?\\\\&space;x_{t&plus;1}&space;=&space;x_t&space;&plus;&space;v_t&space;\cdot&space;cos(\psi_t)&space;*&space;dt&space;\\\\&space;y_{t&plus;1}&space;=&space;y_t&space;&plus;&space;v_t&space;\cdot&space;sin(\psi_t)&space;*&space;dt&space;\\\\&space;\psi_{t&plus;1}&space;=&space;\psi_t&space;&plus;&space;\frac{v_t}{L_f}&space;*&space;\delta_t&space;*&space;dt&space;\\\\&space;v_{t&plus;1}&space;=&space;v_t&space;&plus;&space;a_t&space;*&space;dt
+[model2]: https://latex.codecogs.com/gif.latex?\\\\&space;x_{t&plus;1}&space;=&space;x_t&space;&plus;&space;v_t&space;\cdot&space;cos(\psi_t)&space;*&space;dt&space;\\\\&space;y_{t&plus;1}&space;=&space;y_t&space;&plus;&space;v_t&space;\cdot&space;sin(\psi_t)&space;*&space;dt&space;\\\\&space;\psi_{t&plus;1}&space;=&space;\psi_t&space;&plus;&space;\frac{v_t}{L_f}&space;*&space;\delta_t&space;*&space;dt&space;\\\\&space;v_{t&plus;1}&space;=&space;v_t&space;&plus;&space;a_t&space;*&space;dt&space;\\\\&space;cte_{t&plus;1}&space;=&space;f(x_t)&space;-&space;y_t&space;&plus;&space;v_t&space;*&space;sin(e\psi_t)&space;*&space;dt&space;\\\\&space;e\psi_{t&plus;1}&space;=&space;\psi_t&space;-&space;\psi&space;des_t
+
+## Timestep Length and Elapsed Duration
+
+First, I set the time-horizon, that is N * dt, as long as "one motion" of the vehicle.
+Concretely, I set it as long as the length by which the estimated trajectory covers
+half a corner. In the simulation world, there are no disturbances or moving obstacles
+such as wind or pedestrians. Therefor, I choosed turning around a corner as "one motion" and
+thought that it is enough to consider half a corner to graspe the characteristics of it.
+
+Next, I set dt to 0.1 seconds so that it is the same as the latency.
+
+Finally, I set N to 10 to satisfy the time-horizon described above.
+
+After setting these, I tuned the cost functions and succeeded in running a car
+on the race track.
+
+## Latency
+
+To compensate latency, that is 0.1 seconds, I predicted the state ahead 0.1 second
+using the vehicle model. Then, I used it as the current state for calcurating MPC.
+
+---
+
 ## Dependencies
 
 * cmake >= 3.5
